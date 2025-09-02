@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serendipity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #ffcdcd;
+            --text-color: #333;
+            --bg-color: #fff0f0;
+            --form-bg: #fff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: var(--form-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 25px;
+            }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 0 0 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        #colorPickerContainer {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #colorPicker {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        #colorPicker::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        #colorPicker::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label, .select-gif-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+        }
+
+        .file-upload-label:hover, .select-gif-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
+        }
+        
+        .gif-preview-container {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .gif-preview-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            object-fit: cover;
+        }
+
+        #photoPreviews {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .photo-preview-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            border: 1px dashed var(--primary-color);
+            border-radius: 10px;
+        }
+        
+        .photo-preview-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        .photo-preview-item textarea {
+            width: 90%;
+            min-height: 60px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ffa1a1);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+        }
+
+                /* Styling untuk notifikasi mengambang */
+        .floating-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color); /* Mengikuti warna tema */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, transform 0.4s ease-in-out;
+            z-index: 2000;
+        }
+
+        .floating-notification.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        #result {
+            margin-top: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        #result .thumbnail {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 3px solid var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        #shareLinkContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        #shareLink {
+            font-size: 1rem;
+            color: var(--primary-color);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            color: var(--primary-color);
+        }
+        
+        .copy-btn span {
+            font-size: 1.2em;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-modal-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .gif-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gif-item {
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .gif-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .gif-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gif-item.selected img {
+            border: 3px solid var(--primary-color);
+        }
+
+        /* Message Box and Overlay */
+        .message-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+            max-width: 90%;
+            box-sizing: border-box;
+        }
+        .message-box .close-btn {
+            margin-top: 15px;
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .message-box .close-btn:hover {
+            background-color: #ff4747;
+        }
+
+                /* Styling untuk tombol WhatsApp */
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366; /* Warna hijau WhatsApp */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-btn span {
+            display: inline-block;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            margin-left: 8px;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Serendipity</h1>
+        <p>Isi detail di bawah ini dan buat pesan spesial untuk orang terkasih.</p>
+        
+        <form id="romanceForm">
+            <div class="input-group">
+                <label for="partnerName">Nama Pasangan:</label>
+                <input type="text" id="partnerName" placeholder="Contoh: bubub" required>
+            </div>
+            <div class="input-group">
+                <label for="linkName">Nama Tautan (Opsional):</label>
+                <input type="text" id="linkName" placeholder="Contoh: pesan-untuk-cinta">
+            </div>
+            <div class="input-group">
+                <label for="shortDesc">Deskripsi Singkat:</label>
+                <textarea id="shortDesc" rows="3" placeholder="Contoh: Dia adalah segalanya bagiku."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Pilih Tema Warna:</label>
+                <div id="colorPickerContainer">
+                    <input type="color" id="colorPicker" value="#ff6b6b">
+                    <span id="hexValue">#ff6b6b</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Pilih GIF Utama:</label>
+                <button type="button" class="select-gif-btn" id="selectGifBtn">Pilih GIF</button>
+                <div class="gif-preview-container">
+                    <img id="selectedGifPreview" src="gif/romance.gif" alt="Preview GIF" style="display: block;">
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Foto Pasangan (Maks. 3):</label>
+                <input type="file" id="photoUpload" accept="image/*" multiple required>
+                <label for="photoUpload" class="file-upload-label">Pilih Foto</label>
+                <p id="photoCountMessage" style="font-size: 0.9em; color: #777; margin-top: 5px;"></p>
+                <div id="photoPreviews"></div>
+            </div>
+            <button type="button" class="generate-btn" id="generateBtn">Generate!</button>
+        </form>
+
+        <div id="result">
+            <p>Pesan Anda sudah siap! Klik gambar untuk melihatnya:</p>
+            <a id="resultLink" target="_blank">
+                <img id="thumbnail" class="thumbnail" src="" alt="Thumbnail Pesan">
+            </a>
+            <div id="shareLinkContainer">
+                <p id="shareLinkTitle">Bagikan tautan ini:</p>
+                <a id="shareLink"></a>
+                <span class="copy-btn" id="copyBtn" onclick="copyToClipboard()">
+                    Salin Tautan
+                    <span id="copyIcon">📋</span>
+                </span>
+                <a id="whatsappShareBtn" class="whatsapp-btn" target="_blank" style="margin-top: 10px; display: none;">
+                Bagikan ke WhatsApp <span><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon" style="height: 16px; margin-right: 5px;"></span>
+                </a>
+            </div>
+        </div>
+        <footer class="footer">
+            <p>@Erditya Megantoro</p>
+        </footer>
+        <div id="copyNotification" class="floating-notification">
+    Tersalin! ✅
+</div>
+    </div>
+
+    
+    
+    <div class="overlay" id="overlay"></div>
+    <div class="message-box" id="messageBox">
+        <p id="messageText"></p>
+        <button class="close-btn" onclick="closeMessage()">Tutup</button>
+    </div>
+
+    <div id="gifModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-btn">&times;</span>
+            <h2>Pilih GIF</h2>
+            <div class="gif-grid" id="gifGrid">
+                </div>
+        </div>
+    </div>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const partnerNameInput = document.getElementById('partnerName');
+            const linkNameInput = document.getElementById('linkName');
+            const shortDescTextarea = document.getElementById('shortDesc');
+            const colorPicker = document.getElementById('colorPicker');
+            const hexValueSpan = document.getElementById('hexValue');
+            const photoUploadInput = document.getElementById('photoUpload');
+            const photoPreviewsDiv = document.getElementById('photoPreviews');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultDiv = document.getElementById('result');
+            const resultLink = document.getElementById('resultLink');
+            const thumbnailImg = document.getElementById('thumbnail');
+            const shareLinkA = document.getElementById('shareLink');
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            const overlay = document.getElementById('overlay');
+            const photoCountMessage = document.getElementById('photoCountMessage');
+
+            // GIF Elements
+            const selectGifBtn = document.getElementById('selectGifBtn');
+            const gifModal = document.getElementById('gifModal');
+            const gifGrid = document.getElementById('gifGrid');
+            const closeModalBtn = gifModal.querySelector('.close-modal-btn');
+            const selectedGifPreview = document.getElementById('selectedGifPreview');
+
+            const gifList = [
+                'gif/romance.gif',
+                'gif/romance2.gif',
+                'gif/romance3.gif',
+                'gif/romance4.gif',
+                'gif/romance5.gif',
+                'gif/romance6.gif',
+                'gif/romance7.gif',
+                'gif/romance8.gif',
+                'gif/romance9.gif',
+                'gif/romance10.gif',
+                'gif/romance11.gif',
+                'gif/romance12.gif',
+                'gif/romance13.gif',
+                'gif/romance14.gif',
+                'gif/romance15.gif',
+                'gif/romance16.gif',
+                'gif/romance17.gif',
+                'gif/romance18.gif',
+                'gif/romance19.gif',
+                'gif/romance20.gif'
+            ];
+
+            let photosData = [];
+            let selectedGifUrl = 'gif/romance.gif';
+            
+            const root = document.documentElement;
+            colorPicker.addEventListener('input', (e) => {
+                const color = e.target.value;
+                root.style.setProperty('--primary-color', color);
+                hexValueSpan.textContent = color;
+                generateBtn.style.background = `linear-gradient(45deg, ${color}, ${lightenColor(color, 20)})`;
+            });
+
+            function lightenColor(hex, percent) {
+                const num = parseInt(hex.slice(1), 16),
+                    amt = Math.round(2.55 * percent),
+                    R = (num >> 16) + amt,
+                    G = (num >> 8 & 0x00FF) + amt,
+                    B = (num & 0x0000FF) + amt;
+                return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+            }
+
+            function showMessage(message) {
+                messageText.textContent = message;
+                messageBox.style.display = 'block';
+                overlay.style.display = 'block';
+            }
+
+            window.closeMessage = function() {
+                messageBox.style.display = 'none';
+                overlay.style.display = 'none';
+            };
+
+            photoUploadInput.addEventListener('change', (event) => {
+                const files = event.target.files;
+                photoPreviewsDiv.innerHTML = '';
+                photosData = [];
+
+                if (files.length > 3) {
+                    showMessage("Maksimal 3 foto yang bisa diunggah.");
+                    photoCountMessage.textContent = 'Pilih hingga 3 foto.';
+                    photoUploadInput.value = '';
+                    return;
+                }
+
+                if (files.length === 0) {
+                    photoCountMessage.textContent = '';
+                    return;
+                }
+                
+                photoCountMessage.textContent = `${files.length} dari 3 foto terpilih.`;
+
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const dataUrl = e.target.result;
+                        const previewItem = document.createElement('div');
+                        previewItem.classList.add('photo-preview-item');
+                        
+                        const img = document.createElement('img');
+                        img.src = dataUrl;
+                        img.alt = `Foto ${index + 1}`;
+                        
+                        const textarea = document.createElement('textarea');
+                        textarea.rows = 2;
+                        textarea.placeholder = `Catatan/deskripsi untuk foto ini...`;
+                        
+                        const photoInfo = {
+                            dataUrl: dataUrl,
+                            note: ''
+                        };
+                        photosData.push(photoInfo);
+                        
+                        textarea.addEventListener('input', (e) => {
+                            photoInfo.note = e.target.value;
+                        });
+
+                        previewItem.appendChild(img);
+                        previewItem.appendChild(textarea);
+                        photoPreviewsDiv.appendChild(previewItem);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+           generateBtn.addEventListener('click', () => {
+    const partnerName = partnerNameInput.value.trim();
+    const shortDesc = shortDescTextarea.value.trim();
+    const selectedColor = colorPicker.value;
+    const linkName = linkNameInput.value.trim();
+    const firstPhotoData = photosData.length > 0 ? photosData[0].dataUrl : null;
+
+    if (!partnerName || photosData.length === 0) {
+        showMessage("Nama pasangan dan minimal 1 foto wajib diisi!");
+        return;
+    }
+
+    const slug = linkName ? linkName.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() :
+                         partnerName.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
+
+    if (localStorage.getItem(slug)) {
+        showMessage("Nama tautan sudah ada. Silakan gunakan nama lain.");
+        return;
+    }
+
+    const dataToStore = {
+        partnerName,
+        shortDesc,
+        themeColor: selectedColor,
+        selectedGifUrl,
+        photos: photosData
+    };
+    localStorage.setItem(slug, JSON.stringify(dataToStore));
+
+    const shareableLink = `${window.location.origin}/canvas_romance.html?id=${slug}`;
+
+    thumbnailImg.src = firstPhotoData || '';
+    resultLink.href = shareableLink;
+    shareLinkA.textContent = shareableLink;
+    resultDiv.style.display = 'block';
+    resultDiv.scrollIntoView({ behavior: 'smooth' });
+
+    const whatsappShareBtn = document.getElementById('whatsappShareBtn');
+
+    // Modifikasi ada di sini: Hapus emoji dari shareMessage
+    const cleanedPartnerName = partnerName.replace(/[\u2700-\u27bf]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|[\u2600-\u26FF]/g, '');
+    const shareMessage = `Halo ${cleanedPartnerName}, aku buatkan pesan spesial untukmu! Klik tautan ini untuk melihatnya: ${shareableLink}`;
+
+    const encodedMessage = encodeURIComponent(shareMessage);
+    const whatsappLink = `https://wa.me/?text=${encodedMessage}`;
+    
+    whatsappShareBtn.href = whatsappLink;
+    whatsappShareBtn.style.display = 'inline-flex';
+});
+                // PENTING: Pindahkan fungsi ini ke luar dari `DOMContentLoaded` agar bisa diakses oleh `onclick`
+window.copyToClipboard = () => {
+    const linkElement = document.getElementById('shareLink');
+    const textToCopy = linkElement.textContent;
+    const copyNotification = document.getElementById('copyNotification');
+
+    const tempTextarea = document.createElement('textarea');
+    tempTextarea.value = textToCopy;
+    document.body.appendChild(tempTextarea);
+    tempTextarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempTextarea);
+
+    // Tampilkan notifikasi
+    copyNotification.classList.add('show');
+    copyNotification.textContent = 'Tersalin! ✅'; // Pastikan teksnya benar
+
+    // Sembunyikan notifikasi setelah 2 detik
+    setTimeout(() => {
+        copyNotification.classList.remove('show');
+    }, 2000);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ... (kode Anda yang lain) ...
+
+    // Hapus definisi ulang copyToClipboard di sini, 
+    // karena sudah didefinisikan secara global di atas.
+
+});
+            // GIF Modal Logic
+            function showGifModal() {
+                gifModal.classList.add('show');
+                populateGifGrid();
+            }
+
+            function hideGifModal() {
+                gifModal.classList.remove('show');
+            }
+
+            function populateGifGrid() {
+                gifGrid.innerHTML = '';
+                gifList.forEach(gifUrl => {
+                    const gifItem = document.createElement('div');
+                    gifItem.classList.add('gif-item');
+                    if (gifUrl === selectedGifUrl) {
+                        gifItem.classList.add('selected');
+                    }
+                    const img = document.createElement('img');
+                    img.src = gifUrl;
+                    img.alt = 'GIF';
+                    gifItem.appendChild(img);
+                    gifItem.addEventListener('click', () => {
+                        selectedGifUrl = gifUrl;
+                        selectedGifPreview.src = gifUrl;
+                        hideGifModal();
+                    });
+                    gifGrid.appendChild(gifItem);
+                });
+            }
+
+            selectGifBtn.addEventListener('click', showGifModal);
+            closeModalBtn.addEventListener('click', hideGifModal);
+            gifModal.addEventListener('click', (e) => {
+                if (e.target === gifModal) {
+                    hideGifModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

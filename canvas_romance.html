@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untukmu, Sayangku</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #ffcdcd;
+            --text-color: #333;
+            --bg-color: #fff0f0;
+            --shadow-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Gaya untuk efek hujan bintang dan hati */
+        .falling-element {
+            position: fixed;
+            z-index: -1;
+            pointer-events: none;
+            user-select: none;
+            transform: translateY(-100vh);
+            opacity: 0;
+        }
+
+        .falling-element.animate {
+            animation: fall linear infinite;
+        }
+        
+        .falling-element.heart {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            opacity: 0.8;
+            animation-duration: 15s;
+        }
+        
+        .falling-element.star {
+            font-size: 1rem;
+            color: gold;
+            opacity: 0.6;
+            animation-duration: 20s;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+            }
+            100% {
+                transform: translateY(200vh);
+            }
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin: 0;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin: 5px 0 20px 0;
+            color: #555;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .header img {
+            width: 150px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .description {
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0 auto 40px auto;
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 1.8s ease-out;
+        }
+
+        .reveal-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            font-size: 4rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulse 2s infinite ease-in-out;
+            margin-top: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .reveal-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-gallery {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+            animation: fadeIn 2s ease-out forwards;
+            margin-top: 50px;
+            width: 100%;
+        }
+        
+        .photo-item {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            text-align: left;
+            width: 100%;
+            transition: opacity 1s, transform 1s;
+            opacity: 0;
+            transform: translateY(20px);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .photo-item.left {
+            flex-direction: row;
+        }
+
+        .photo-item.right {
+            flex-direction: row-reverse;
+        }
+        
+        .photo-frame-container {
+            position: relative;
+            width: 50%;
+            border: 5px solid var(--primary-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            padding: 10px;
+        }
+
+        .photo-frame-container::before {
+            content: '❤';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            border-radius: 10px;
+            color: var(--primary-color);
+            background: var(--bg-color);
+            padding: 0 5px;
+            z-index: 10;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            display: block;
+            transition: transform 0.5s ease-out;
+        }
+        
+        .photo-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-item .note {
+            width: 50%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 700px) {
+            
+            .header h1 {
+                font-size: 40px;
+                text-align: center;
+            }
+            .photo-item {
+                flex-direction: column !important;
+                text-align: center;
+                gap: 15px;
+            }
+            .photo-frame-container, .photo-item .note {
+                width: 80%;
+                max-width: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span id="partnerName"></span></h1>
+            <img id="headerImage" src="" alt="Gambar Romantis">
+        </div>
+        
+        <p class="description" id="shortDesc"></p>
+
+        <button class="reveal-button" id="revealBtn">
+            &#x2764;
+        </button>
+
+        <div class="photo-gallery" id="photoGallery">
+            <!-- Foto dan catatan akan ditambahkan di sini oleh JavaScript -->
+        </div>
+
+        <p style="margin-top: 50px; font-style: italic;"><span id="creatorName"></span>.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const root = document.documentElement;
+            const revealBtn = document.getElementById('revealBtn');
+            const photoGallery = document.getElementById('photoGallery');
+            const creatorName = 'Dari Aku❤️';
+            
+            if (!id) {
+                document.body.innerHTML = '<h1 style="color: var(--primary-color);">URL tidak valid!</h1><p>Silakan kembali ke halaman utama untuk membuat pesan.</p>';
+                return;
+            }
+
+            const data = localStorage.getItem(id);
+            if (!data) {
+                document.body.innerHTML = '<h1 style="color: var(--primary-color);">Data tidak ditemukan!</h1><p>Pesan mungkin sudah kadaluarsa atau tidak ada.</p>';
+                return;
+            }
+
+            const parsedData = JSON.parse(data);
+            
+            const primaryColor = parsedData.themeColor || '#ff6b6b';
+            const secondaryColor = lightenColor(primaryColor, 50);
+            root.style.setProperty('--primary-color', primaryColor);
+            root.style.setProperty('--secondary-color', secondaryColor);
+            root.style.setProperty('--bg-color', secondaryColor);
+            
+            document.getElementById('partnerName').textContent = parsedData.partnerName;
+            document.getElementById('shortDesc').textContent = parsedData.shortDesc;
+            document.getElementById('creatorName').textContent = creatorName;
+            
+            const headerImg = document.getElementById('headerImage');
+            const selectedGifUrl = parsedData.selectedGifUrl || 'gif/romance.gif';
+            headerImg.src = selectedGifUrl;
+
+            function lightenColor(hex, percent) {
+                const num = parseInt(hex.slice(1), 16),
+                    amt = Math.round(2.55 * percent),
+                    R = (num >> 16) + amt,
+                    G = (num >> 8 & 0x00FF) + amt,
+                    B = (num & 0x0000FF) + amt;
+                return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+            }
+
+            function createPhotoItems() {
+                parsedData.photos.forEach((photo, index) => {
+                    const photoItem = document.createElement('div');
+                    photoItem.classList.add('photo-item');
+                    photoItem.classList.add(index % 2 === 0 ? 'left' : 'right');
+
+                    const photoFrameContainer = document.createElement('div');
+                    photoFrameContainer.classList.add('photo-frame-container');
+
+                    const img = document.createElement('img');
+                    img.src = photo.dataUrl;
+                    img.alt = `Foto ${parsedData.partnerName}`;
+
+                    const noteDiv = document.createElement('div');
+                    noteDiv.classList.add('note');
+                    noteDiv.textContent = photo.note || "....";
+
+                    photoFrameContainer.appendChild(img);
+                    photoItem.appendChild(photoFrameContainer);
+                    photoItem.appendChild(noteDiv);
+                    photoGallery.appendChild(photoItem);
+                });
+            }
+
+            revealBtn.addEventListener('click', () => {
+                revealBtn.style.display = 'none';
+                photoGallery.style.display = 'flex';
+                createPhotoItems();
+                
+                setTimeout(() => {
+                    const photoItems = document.querySelectorAll('.photo-item');
+                    photoItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'translateY(0)';
+                        }, index * 500);
+                    });
+                }, 100);
+            });
+
+            function createFallingElements() {
+                const numHearts = 30;
+                const numStars = 20;
+
+                for (let i = 0; i < numHearts; i++) {
+                    const heart = document.createElement('span');
+                    heart.className = 'falling-element heart';
+                    heart.innerHTML = '&#x2764;';
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.animationDelay = `${Math.random() * 10}s`;
+                    document.body.appendChild(heart);
+                }
+
+                for (let i = 0; i < numStars; i++) {
+                    const star = document.createElement('span');
+                    star.className = 'falling-element star';
+                    star.innerHTML = '&#x2B50;';
+                    star.style.left = `${Math.random() * 100}vw`;
+                    star.style.animationDelay = `${Math.random() * 20}s`;
+                    document.body.appendChild(star);
+                }
+
+                setTimeout(() => {
+                    const elements = document.querySelectorAll('.falling-element');
+                    elements.forEach(el => el.classList.add('animate'));
+                }, 100);
+            }
+
+            // Panggil fungsi createFallingElements di sini
+            createFallingElements();
+        });
+    </script>
+</body>
+</html>
